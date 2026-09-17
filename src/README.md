@@ -1,11 +1,13 @@
 # Mergington High School Activities API
 
-A super simple FastAPI application that allows students to view and sign up for extracurricular activities.
+A simple FastAPI application that allows students to view and sign up for extracurricular activities.
 
 ## Features
 
 - View all available extracurricular activities
 - Sign up for activities
+- Unregister from activities
+- Persist activities, students, providers, and applications in SQLite
 
 ## Getting Started
 
@@ -31,20 +33,25 @@ A super simple FastAPI application that allows students to view and sign up for 
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
 | GET    | `/activities`                                                     | Get all activities with their details and current participant count |
 | POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| DELETE | `/activities/{activity_name}/unregister?email=student@mergington.edu` | Unregister from an activity                                      |
 
 ## Data Model
 
 The application uses a simple data model with meaningful identifiers:
 
-1. **Activities** - Uses activity name as identifier:
+1. **Activities** - Stored with a stable database identifier and exposed by name:
 
    - Description
    - Schedule
    - Maximum number of participants allowed
    - List of student emails who are signed up
 
-2. **Students** - Uses email as identifier:
+2. **Users and students** - A user is identified by email and linked to a student profile:
    - Name
    - Grade level
 
-All data is stored in memory, which means data will be reset when the server restarts.
+3. **Providers** - Own activity records and can be expanded with provider management features.
+
+4. **Applications** - Link students to activities and track active or withdrawn participation.
+
+SQLite data is stored in `src/data/activities.db` by default. Set `ACTIVITY_DB_PATH` to use a different database location. The initial activity catalog is seeded automatically when the database is empty.
